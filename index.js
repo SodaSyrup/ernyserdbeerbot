@@ -50,13 +50,21 @@ client.on('ready', async () => {
     if (today.getHours() === 8 && lastCheckedDate !== dateString) {
       lastCheckedDate = dateString;
       
-      const stmt = db.prepare('SELECT user_id, channel_id FROM birthdays WHERE birthday_date LIKE ?');
+      const stmt = db.prepare('SELECT user_id, channel_id, birthday_date FROM birthdays WHERE birthday_date LIKE ?');
       const rows = stmt.all(`${dateString}%`);
       
       for (const row of rows) {
         const channel = client.channels.cache.get(row.channel_id);
         if (channel) {
-          channel.send(`@everyone Alles Gute zum Geburtstag, <@${row.user_id}>! Ich wünsche dir einen wunderbaren Tag voller Freude, Kuchen und tollen Momenten!`);
+          let greeting = `Alles Gute zum Geburtstag, <@${row.user_id}>!`;
+          const parts = row.birthday_date.split('.');
+          
+          if (parts.length === 3) {
+            const age = today.getFullYear() - parseInt(parts[2], 10);
+            greeting = `Herzlichen Glückwunsch zum ${age}. Geburtstag, <@${row.user_id}>!`;
+          }
+          
+          channel.send(`@everyone ${greeting} Ich wünsche dir einen wunderbaren Tag voller Freude, Kuchen und tollen Momenten!`);
         }
       }
     }
