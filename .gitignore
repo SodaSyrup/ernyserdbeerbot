@@ -3,10 +3,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# Environment variables (CRITICAL: keeps your Discord Token secret!)
+# Environment variables
 .env
 
-# SQLite Database (Keeps your local saved birthdays out of the repo)
+# SQLite Database
 birthdays.db
 birthdays.db-journal
 birthdays.db-wal
